@@ -34,6 +34,6 @@ private:
     QGraphicsScene *scene;
     Board *board;
     // MySquare *square;
-    // QTimer *timer;
+    QTimer *timer;
  };
 #endif // MAINWINDOW_H

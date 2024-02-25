@@ -10,9 +10,10 @@ class Board : public QGraphicsItem
 {
 public:
     Board(int rows, int cols, int tileSize, QGraphicsItem *parent = nullptr);
+    Board(Board &other);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
+    void advance(int phase);
 private:
     QList<Tile*> tiles;
     int rows;

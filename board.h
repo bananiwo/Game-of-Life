@@ -14,6 +14,7 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void advance(int phase);
+    bool operator==(const Board &other) const;
 private:
     QList<Tile*> tiles;
     int rows;

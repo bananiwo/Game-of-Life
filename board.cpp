@@ -51,6 +51,18 @@ void Board::advance(int phase)
     }
 
     qDebug() << QString("%1 tiles pressed").arg(pressed);
-
-
 }
+
+bool Board::operator==(const Board &other) const
+{
+    if (rows != other.rows || cols != other.cols || tileSize != other.tileSize)
+        return false;
+
+    for (int i=0; i<tiles.length(); i++) {
+        if(*tiles.at(i) != *other.tiles.at(i))
+            return false;
+    }
+
+    return true;
+}
+

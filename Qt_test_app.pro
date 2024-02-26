@@ -2,7 +2,7 @@ QT       += core gui testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17 testcase
+CONFIG += c++17 testcase no_testcase_installs
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -15,6 +15,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    TestBoard.h \
     TestTile.h \
     Tile.h \
     board.h \

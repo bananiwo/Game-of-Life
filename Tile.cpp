@@ -55,3 +55,12 @@ bool Tile::operator==(const Tile &other) const
         return false;
 }
 
+bool Tile::operator!=(const Tile &other) const
+{
+    if (row == other.row && col == other.col && tileSize == other.tileSize
+        && isPressed == other.isPressed)
+        return false;
+    else
+        return true;
+}
+

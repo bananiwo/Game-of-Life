@@ -48,6 +48,17 @@ private slots:
         QVERIFY(t == other);
     }
 
+    void operatorNotEqual()
+    {
+        Tile t(2, 3, 4);
+        Tile other(3, 3, 4);
+        QVERIFY(t != other);
+        Tile other1(2, 4, 4);
+        QVERIFY(t != other1);
+        Tile other2(2, 3, 5);
+        QVERIFY(t != other2);
+    }
+
     void copyConstructor()
     {
         Tile original(1, 2, 3);

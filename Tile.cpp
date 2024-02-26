@@ -46,3 +46,12 @@ void Tile::changeState()
     isPressed = !isPressed;
 }
 
+bool Tile::operator==(const Tile &other) const
+{
+    if (row == other.row && col == other.col && tileSize == other.tileSize
+        && isPressed == other.isPressed)
+        return true;
+    else
+        return false;
+}
+

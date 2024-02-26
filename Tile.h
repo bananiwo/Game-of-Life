@@ -17,6 +17,7 @@ public:
     int getCol() const;
     void changeState();
     bool isPressed;
+    bool operator==(const Tile &other) const;
 private:
     int row;
     int col;

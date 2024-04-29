@@ -25,7 +25,8 @@ public:
     // void setTimer(QTimer *newTimer);
 
 private slots:
-
+    void onPlayButtonClicked();
+    void onStopButtonClicked();
 
 private:
     // void mousePressEvent(QGraphicsSceneMouseEvent *event);

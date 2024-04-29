@@ -1,22 +1,22 @@
 #include "Tile.h"
 
 Tile::Tile(int row, int col, int tileSize, QGraphicsItem *parent)
-    : QGraphicsItem(parent), row(row), col(col), tileSize(tileSize)
+    : QGraphicsItem(parent), m_row(row), m_col(col), m_tileSize(tileSize)
 {
     isPressed = false;
 }
 
 Tile::Tile(Tile &t)
 {
-    row = t.row;
-    col = t.col;
+    m_row = t.m_row;
+    m_col = t.m_col;
     isPressed = t.isPressed;
-    tileSize = t.tileSize;
+    m_tileSize = t.m_tileSize;
 }
 
 QRectF Tile::boundingRect() const
 {
-    return QRectF(0, 0, tileSize, tileSize);
+    return QRectF(0, 0, m_tileSize, m_tileSize);
 }
 
 void Tile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -31,16 +31,6 @@ void Tile::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-int Tile::getRow() const
-{
-    return row;
-}
-
-int Tile::getCol() const
-{
-    return col;
-}
-
 void Tile::changeState()
 {
     isPressed = !isPressed;
@@ -48,7 +38,7 @@ void Tile::changeState()
 
 bool Tile::operator==(const Tile &other) const
 {
-    if (row == other.row && col == other.col && tileSize == other.tileSize
+    if (m_row == other.m_row && m_col == other.m_col && m_tileSize == other.m_tileSize
         && isPressed == other.isPressed)
         return true;
     else
@@ -57,7 +47,7 @@ bool Tile::operator==(const Tile &other) const
 
 bool Tile::operator!=(const Tile &other) const
 {
-    if (row == other.row && col == other.col && tileSize == other.tileSize
+    if (m_row == other.m_row && m_col == other.m_col && m_tileSize == other.m_tileSize
         && isPressed == other.isPressed)
         return false;
     else

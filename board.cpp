@@ -3,32 +3,34 @@
 #include <string>
 
 Board::Board(int rows, int cols, int tileSize, QGraphicsItem *parent)
-    : QGraphicsItem(parent), rows(rows), cols(cols), tileSize(tileSize)
+    : QGraphicsItem(parent), m_rows(rows), m_cols(cols), m_tileSize(tileSize)
 {
+    m_state = State::Setup;
     for (int row=0; row<rows; row++){
         for (int col=0; col<cols; col++){
             Tile *tile = new Tile(row, col, tileSize, this);
             tile->setPos(col*tileSize, row*tileSize);
-            tiles.append(tile);
+            m_tiles.append(tile);
         }
     }
 }
 
 Board::Board(Board &other)
 {
-    rows = other.rows;
-    cols = other.cols;
-    tileSize = other.tileSize;
+    m_rows = other.m_rows;
+    m_cols = other.m_cols;
+    m_tileSize = other.m_tileSize;
+    m_state = other.m_state;
 
-    for (Tile *originalTile : other.tiles) {
+    for (Tile *originalTile : other.m_tiles) {
         Tile *copiedTile = new Tile(*originalTile);
-        tiles.append(copiedTile);
+        m_tiles.append(copiedTile);
     }
 }
 
 QRectF Board::boundingRect() const
 {
-    return QRectF(-10, -10, cols*tileSize+20, rows*tileSize+20);
+    return QRectF(-10, -10, m_cols*m_tileSize+20, m_rows*m_tileSize+20);
 }
 
 void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -46,20 +48,26 @@ void Board::advance(int phase)
     if (!phase) return;
 
     int pressed = 0;
-    for (auto t : tiles) {
+    for (auto t : m_tiles) {
         if (t->isPressed) pressed++;
     }
 
     qDebug() << QString("%1 tiles pressed").arg(pressed);
 }
 
+void Board::changeState(const State newState)
+{
+    m_state = newState;
+    qDebug() << "State changed to " << m_state;
+}
+
 bool Board::operator==(const Board &other) const
 {
-    if (rows != other.rows || cols != other.cols || tileSize != other.tileSize)
+    if (m_rows != other.m_rows || m_cols != other.m_cols || m_tileSize != other.m_tileSize)
         return false;
 
-    for (int i=0; i<tiles.length(); i++) {
-        if(*tiles.at(i) != *other.tiles.at(i))
+    for (int i=0; i<m_tiles.length(); i++) {
+        if(*m_tiles.at(i) != *other.m_tiles.at(i))
             return false;
     }
 

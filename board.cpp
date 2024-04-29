@@ -1,6 +1,7 @@
 #include "board.h"
 #include <iostream>
 #include <string>
+#include <QGraphicsSceneMouseEvent>
 
 Board::Board(int rows, int cols, int tileSize, QGraphicsItem *parent)
     : QGraphicsItem(parent), m_rows(rows), m_cols(cols), m_tileSize(tileSize)
@@ -45,13 +46,42 @@ void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 void Board::advance()
 {
-    qDebug() << Q_FUNC_INFO;
+    if(!m_state == State::Play) return;
+    // next move logic
+    for (int i=1; i<20; i++)
+    {
+        if (m_tiles.at(i-1)->isActive())
+        {
+            m_tiles.at(i-1)->activate(false);
+            m_tiles.at(i)->activate(true);
+        }
+    }
+
+    for (Tile* tile : m_tiles)
+    {
+        tile->updateActive();
+    }
+
+    update();
 }
 
 void Board::changeState(const State newState)
 {
     m_state = newState;
-    qDebug() << Q_FUNC_INFO << " State = " << newState;
+    if(m_state == State::Play)
+    {
+        for (auto tile : m_tiles)
+        {
+            tile->setAllowMousePressEvents(false);
+        }
+    }
+    else if(m_state == State::Setup)
+    {
+        for (auto tile : m_tiles)
+        {
+            tile->setAllowMousePressEvents(true);
+        }
+    }
 }
 
 bool Board::operator==(const Board &other) const

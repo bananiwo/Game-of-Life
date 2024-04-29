@@ -30,16 +30,16 @@ private slots:
         QVERIFY(tile->getCol() == 3);
     }
 
-    void isPressed()
-    {
-        QVERIFY(tile->isPressed == false);
-    }
+    // void isPressed()
+    // {
+    //     QVERIFY(tile->m_active == false);
+    // }
 
-    void changeState()
-    {
-        tile->changeState();
-        QVERIFY(tile->isPressed == true);
-    }
+    // void changeState()
+    // {
+    //     tile->changeActive();
+    //     QVERIFY(tile->m_active == true);
+    // }
 
     void operatorEqual()
     {

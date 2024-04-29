@@ -25,7 +25,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onPlayButtonClicked()
 {
-    if(m_board == nullptr || m_board->getState() == State::Play)
+    if(!m_board || m_board->getState() == State::Play)
         return;
 
     ui->sizeSlider->setEnabled(false);
@@ -35,7 +35,7 @@ void MainWindow::onPlayButtonClicked()
 
 void MainWindow::onStopButtonClicked()
 {
-    if(m_board == nullptr || m_board->getState() == State::Setup)
+    if(!m_board || m_board->getState() == State::Setup)
         return;
 
     ui->sizeSlider->setEnabled(true);

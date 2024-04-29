@@ -9,10 +9,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
-    board = new Board(10, 10, 40);
-    scene->addItem(board);
+    m_board = new Board(10, 10, 40);
+    scene->addItem(m_board);
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onPlayButtonClicked()));
     connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(onStopButtonClicked()));
+    connect(ui->sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(onBoardSizeChanged(int)));
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(advanceTime()));
 }
 
 MainWindow::~MainWindow()
@@ -22,20 +25,32 @@ MainWindow::~MainWindow()
 
 void MainWindow::onPlayButtonClicked()
 {
-    if(board == nullptr || board->getState() == State::Play)
+    if(m_board == nullptr || m_board->getState() == State::Play)
         return;
 
     ui->sizeSlider->setEnabled(false);
-    board->changeState(State::Play);
+    m_board->changeState(State::Play);
+    m_timer->start(500);
 }
 
 void MainWindow::onStopButtonClicked()
 {
-    if(board == nullptr || board->getState() == State::Setup)
+    if(m_board == nullptr || m_board->getState() == State::Setup)
         return;
 
     ui->sizeSlider->setEnabled(true);
-    board->changeState(State::Setup);
+    m_board->changeState(State::Setup);
+    m_timer->stop();
+}
+
+void MainWindow::onBoardSizeChanged(int newSize)
+{
+    qDebug() << "New size " << newSize;
+}
+
+void MainWindow::advanceTime()
+{
+    m_board->advance();
 }
 
 

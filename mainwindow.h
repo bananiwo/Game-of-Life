@@ -22,19 +22,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    // void setTimer(QTimer *newTimer);
 
 private slots:
     void onPlayButtonClicked();
     void onStopButtonClicked();
+    void onBoardSizeChanged(int newSize);
+    void advanceTime();
 
 private:
-    // void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    Board *board;
-    // MySquare *square;
-    QTimer *timer;
+    Board *m_board;
+    QTimer *m_timer;
  };
 #endif // MAINWINDOW_H

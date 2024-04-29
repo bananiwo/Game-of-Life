@@ -43,22 +43,15 @@ void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     painter->drawRect(boundingRect());
 }
 
-void Board::advance(int phase)
+void Board::advance()
 {
-    if (!phase) return;
-
-    int pressed = 0;
-    for (auto t : m_tiles) {
-        if (t->isPressed) pressed++;
-    }
-
-    qDebug() << QString("%1 tiles pressed").arg(pressed);
+    qDebug() << Q_FUNC_INFO;
 }
 
 void Board::changeState(const State newState)
 {
     m_state = newState;
-    qDebug() << "State changed to " << m_state;
+    qDebug() << Q_FUNC_INFO << " State = " << newState;
 }
 
 bool Board::operator==(const Board &other) const

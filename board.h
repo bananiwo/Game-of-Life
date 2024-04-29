@@ -19,10 +19,11 @@ public:
     Board(Board &other);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void advance(int phase);
+    void advance();
     void changeState(const State newState);
     inline State getState() const {return m_state;}
     bool operator==(const Board &other) const;
+
 private:
     QList<Tile*> m_tiles;
     int m_rows;

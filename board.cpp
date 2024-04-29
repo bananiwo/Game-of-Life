@@ -9,7 +9,7 @@ Board::Board(int rows, int cols, int tileSize, QGraphicsItem *parent)
     m_state = State::Setup;
     for (int row=0; row<rows; row++){
         for (int col=0; col<cols; col++){
-            Tile *tile = new Tile(row, col, tileSize, this);
+            Tile *tile = new Tile(tileSize, this);
             tile->setPos(col*tileSize, row*tileSize);
             m_tiles.append(tile);
         }
@@ -84,16 +84,5 @@ void Board::changeState(const State newState)
     }
 }
 
-bool Board::operator==(const Board &other) const
-{
-    if (m_rows != other.m_rows || m_cols != other.m_cols || m_tileSize != other.m_tileSize)
-        return false;
 
-    for (int i=0; i<m_tiles.length(); i++) {
-        if(*m_tiles.at(i) != *other.m_tiles.at(i))
-            return false;
-    }
-
-    return true;
-}
 

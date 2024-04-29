@@ -22,7 +22,6 @@ public:
     void advance();
     void changeState(const State newState);
     inline State getState() const {return m_state;}
-    bool operator==(const Board &other) const;
 
 private:
     QList<Tile*> m_tiles;

@@ -15,8 +15,6 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    TestBoard.h \
-    TestTile.h \
     Tile.h \
     board.h \
     mainwindow.h

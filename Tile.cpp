@@ -1,7 +1,7 @@
 #include "Tile.h"
 
-Tile::Tile(int row, int col, int tileSize, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_row(row), m_col(col), m_tileSize(tileSize)
+Tile::Tile(int tileSize, QGraphicsItem *parent)
+    : QGraphicsItem(parent), m_tileSize(tileSize)
 {
     m_active = false;
     m_nextActive = m_active;
@@ -9,8 +9,6 @@ Tile::Tile(int row, int col, int tileSize, QGraphicsItem *parent)
 
 Tile::Tile(Tile &t)
 {
-    m_row = t.m_row;
-    m_col = t.m_col;
     m_active = t.m_active;
     m_nextActive = m_active;
     m_tileSize = t.m_tileSize;
@@ -43,24 +41,6 @@ void Tile::changeActive()
 void Tile::updateActive()
 {
     m_active = m_nextActive;
-}
-
-bool Tile::operator==(const Tile &other) const
-{
-    if (m_row == other.m_row && m_col == other.m_col && m_tileSize == other.m_tileSize
-        && m_active == other.m_active)
-        return true;
-    else
-        return false;
-}
-
-bool Tile::operator!=(const Tile &other) const
-{
-    if (m_row == other.m_row && m_col == other.m_col && m_tileSize == other.m_tileSize
-        && m_active == other.m_active)
-        return false;
-    else
-        return true;
 }
 
 void Tile::setAllowMousePressEvents(bool allowMousePressEvents)

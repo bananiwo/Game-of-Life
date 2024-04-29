@@ -24,7 +24,12 @@ public:
     inline State getState() const {return m_state;}
 
 private:
-    QList<Tile*> m_tiles;
+    void forEachTile(const std::function<void(Tile*)>& func);
+    void allowMousePressEventsForAllTiles(bool allow);
+    QVector<Tile*> getNeighbours(const int row, const int col) const;
+
+private:
+    QVector<QVector<Tile*>> m_tiles;
     int m_rows;
     int m_cols;
     int m_tileSize;

@@ -1,15 +1,24 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QScreen>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(m_windowSize, m_windowSize);
+    // center window
+    QPoint centerPoint = QGuiApplication::primaryScreen()->geometry().center();
+    QPoint topleftPoint = centerPoint - this->rect().center();
+    this->move(topleftPoint);
 
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
-    m_board = new Board(10, 10, 40);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_board = new Board(10, 50);
     scene->addItem(m_board);
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onPlayButtonClicked()));
     connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(onStopButtonClicked()));
@@ -45,7 +54,12 @@ void MainWindow::onStopButtonClicked()
 
 void MainWindow::onBoardSizeChanged(int newSize)
 {
-    qDebug() << "New size " << newSize;
+    // scene->removeItem(m_board);
+    int graphicsViewSize = ui->graphicsView->size().height();
+    int tileSize = graphicsViewSize / newSize;
+    m_board = new Board(newSize, tileSize);
+    scene->addItem(m_board);
+    update();
 }
 
 void MainWindow::advanceTime()

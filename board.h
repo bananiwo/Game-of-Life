@@ -15,7 +15,7 @@ enum State
 class Board : public QGraphicsItem
 {
 public:
-    Board(int rows, int cols, int tileSize, QGraphicsItem *parent = nullptr);
+    Board(int size, int tileSize, QGraphicsItem *parent = nullptr);
     Board(Board &other);
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -30,8 +30,7 @@ private:
 
 private:
     QVector<QVector<Tile*>> m_tiles;
-    int m_rows;
-    int m_cols;
+    int m_size;
     int m_tileSize;
     State m_state;
 };

@@ -3,18 +3,18 @@
 #include <string>
 #include <QGraphicsSceneMouseEvent>
 
-Board::Board(int rows, int cols, int tileSize, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_rows(rows), m_cols(cols), m_tileSize(tileSize)
+Board::Board(int size, int tileSize, QGraphicsItem *parent)
+    : QGraphicsItem(parent), m_size(size), m_tileSize(tileSize)
 {
     m_state = State::Setup;
-    m_tiles.resize(m_rows);
+    m_tiles.resize(m_size);
 
-    for (int row=0; row<m_rows; row++)
+    for (int row=0; row<m_size; row++)
     {
-        m_tiles[row].resize(m_cols);
+        m_tiles[row].resize(m_size);
     }
-    for (int row=0; row<rows; row++){
-        for (int col=0; col<cols; col++){
+    for (int row=0; row<m_size; row++){
+        for (int col=0; col<m_size; col++){
             Tile *tile = new Tile(tileSize, this);
             tile->setPos(row*tileSize, col*tileSize);
             m_tiles[row][col] = tile;
@@ -24,13 +24,13 @@ Board::Board(int rows, int cols, int tileSize, QGraphicsItem *parent)
 
 Board::Board(Board &other)
 {
-    m_rows = other.m_rows;
-    m_cols = other.m_cols;
+    m_size = other.m_size;
+    m_size = other.m_size;
     m_tileSize = other.m_tileSize;
     m_state = other.m_state;
 
-    for (int row=0; row<m_rows; row++){
-        for (int col=0; col<m_cols; col++){
+    for (int row=0; row<m_size; row++){
+        for (int col=0; col<m_size; col++){
             m_tiles[row][col] = new Tile(*other.m_tiles[row][col]);
         }
     }
@@ -38,7 +38,7 @@ Board::Board(Board &other)
 
 QRectF Board::boundingRect() const
 {
-    return QRectF(-10, -10, m_cols*m_tileSize+20, m_rows*m_tileSize+20);
+    return QRectF(0, 0, m_size*m_tileSize, m_size*m_tileSize);
 }
 
 void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -55,8 +55,8 @@ void Board::advance()
 {
     if(m_state != State::Play) return;
     // next move logic
-    for (int row=1; row<m_rows-1; row++){
-        for (int col=1; col<m_cols-1; col++){
+    for (int row=1; row<m_size-1; row++){
+        for (int col=1; col<m_size-1; col++){
             Tile* currentTile = m_tiles[row][col];
             int activeNeighbours = 0;
             QVector<Tile*> n = getNeighbours(row, col);

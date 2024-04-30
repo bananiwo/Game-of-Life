@@ -34,5 +34,6 @@ private:
     QGraphicsScene *scene;
     Board *m_board;
     QTimer *m_timer;
+    int m_windowSize = 800;
  };
 #endif // MAINWINDOW_H

@@ -8,8 +8,9 @@
 
 enum State
 {
-    Setup = 0,
-    Play = 1
+    Stop = 0,
+    Play = 1,
+    Paused = 2
 };
 
 class Board : public QGraphicsItem
@@ -22,6 +23,7 @@ public:
     void advance();
     void changeState(const State newState);
     inline State getState() const {return m_state;}
+    void reset();
 
 private:
     void forEachTile(const std::function<void(Tile*)>& func);

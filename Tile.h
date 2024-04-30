@@ -17,7 +17,6 @@ public:
     inline void activate(bool nextActive) {m_nextActive = nextActive;}
     void changeActive();
     void updateActive();
-
     void setAllowMousePressEvents(bool allowMousePressEvents);
 
 private:

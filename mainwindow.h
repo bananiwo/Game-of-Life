@@ -25,7 +25,7 @@ public:
 
 private slots:
     void onPlayButtonClicked();
-    void onStopButtonClicked();
+    void onPauseButtonClicked();
     void onBoardSizeChanged(int newSize);
     void advanceTime();
 
@@ -35,5 +35,6 @@ private:
     Board *m_board;
     QTimer *m_timer;
     int m_windowSize = 800;
+    int m_timeInterval = 500;
  };
 #endif // MAINWINDOW_H

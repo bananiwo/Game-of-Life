@@ -6,7 +6,7 @@
 Board::Board(int size, int tileSize, QGraphicsItem *parent)
     : QGraphicsItem(parent), m_size(size), m_tileSize(tileSize)
 {
-    m_state = State::Setup;
+    m_state = State::Stop;
     m_tiles.resize(m_size);
 
     for (int row=0; row<m_size; row++)
@@ -88,14 +88,24 @@ void Board::advance()
 void Board::changeState(const State newState)
 {
     m_state = newState;
-    if(m_state == State::Play)
+    if(m_state == State::Stop)
+    {
+        allowMousePressEventsForAllTiles(true);
+        reset();
+    }
+    else
     {
         allowMousePressEventsForAllTiles(false);
     }
-    else if(m_state == State::Setup)
-    {
-        allowMousePressEventsForAllTiles(true);
-    }
+}
+
+void Board::reset()
+{
+    forEachTile([](Tile* tile){
+        tile->activate(false);
+        tile->updateActive();
+    });
+    update();
 }
 
 void Board::forEachTile(const std::function<void (Tile *)> &func)

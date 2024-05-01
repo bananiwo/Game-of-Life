@@ -26,15 +26,16 @@ public:
 private slots:
     void onPlayButtonClicked();
     void onPauseButtonClicked();
-    void onBoardSizeChanged(int newSize);
+    void setupBoard(int newSize);
     void advanceTime();
+    void setTimeInterval(int interval);
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    Board *m_board;
+    Board *m_board = nullptr;
     QTimer *m_timer;
-    int m_windowSize = 800;
+    int m_windowSize = 750;
     int m_timeInterval = 500;
  };
 #endif // MAINWINDOW_H

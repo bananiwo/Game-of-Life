@@ -3,18 +3,18 @@
 #include <string>
 #include <QGraphicsSceneMouseEvent>
 
-Board::Board(int size, int tileSize, QGraphicsItem *parent)
-    : QGraphicsItem(parent), m_size(size), m_tileSize(tileSize)
+Board::Board(int gridNum, int tileSize, QGraphicsItem *parent)
+    : QGraphicsItem(parent), m_gridNum(gridNum), m_tileSize(tileSize)
 {
     m_state = State::Stop;
-    m_tiles.resize(m_size);
+    m_tiles.resize(m_gridNum);
 
-    for (int row=0; row<m_size; row++)
+    for (int row=0; row<m_gridNum; row++)
     {
-        m_tiles[row].resize(m_size);
+        m_tiles[row].resize(m_gridNum);
     }
-    for (int row=0; row<m_size; row++){
-        for (int col=0; col<m_size; col++){
+    for (int row=0; row<m_gridNum; row++){
+        for (int col=0; col<m_gridNum; col++){
             Tile *tile = new Tile(tileSize, this);
             tile->setPos(row*tileSize, col*tileSize);
             m_tiles[row][col] = tile;
@@ -24,13 +24,13 @@ Board::Board(int size, int tileSize, QGraphicsItem *parent)
 
 Board::Board(Board &other)
 {
-    m_size = other.m_size;
-    m_size = other.m_size;
+    m_gridNum = other.m_gridNum;
+    m_gridNum = other.m_gridNum;
     m_tileSize = other.m_tileSize;
     m_state = other.m_state;
 
-    for (int row=0; row<m_size; row++){
-        for (int col=0; col<m_size; col++){
+    for (int row=0; row<m_gridNum; row++){
+        for (int col=0; col<m_gridNum; col++){
             m_tiles[row][col] = new Tile(*other.m_tiles[row][col]);
         }
     }
@@ -38,16 +38,15 @@ Board::Board(Board &other)
 
 QRectF Board::boundingRect() const
 {
-    return QRectF(0, 0, m_size*m_tileSize, m_size*m_tileSize);
+    int offset = 10;
+    return QRectF(-offset, -offset, m_gridNum*m_tileSize+2*offset, m_gridNum*m_tileSize+2*offset);
 }
 
 void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
  // Draw border
-    QPen pen;
-    pen.setStyle(Qt::NoPen);
-    painter->setPen(pen);
-    painter->setBrush(Qt::darkYellow);
+    painter->setPen(QPen(Qt::NoPen));
+    painter->setBrush(Qt::darkGray);
     painter->drawRect(boundingRect());
 }
 
@@ -55,8 +54,8 @@ void Board::advance()
 {
     if(m_state != State::Play) return;
     // next move logic
-    for (int row=1; row<m_size-1; row++){
-        for (int col=1; col<m_size-1; col++){
+    for (int row=1; row<m_gridNum-1; row++){
+        for (int col=1; col<m_gridNum-1; col++){
             Tile* currentTile = m_tiles[row][col];
             int activeNeighbours = 0;
             QVector<Tile*> n = getNeighbours(row, col);

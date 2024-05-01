@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setFixedSize(m_windowSize, m_windowSize);
+    this->setFixedSize(m_windowSize, m_windowSize+60);
     // center window
     QPoint centerPoint = QGuiApplication::primaryScreen()->geometry().center();
     QPoint topleftPoint = centerPoint - this->rect().center();
@@ -16,16 +16,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->pauseButton->setEnabled(false);
     scene = new QGraphicsScene(this);
+    ui->graphicsView->setFixedSize(720, 720);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_board = new Board(10, 50);
-    scene->addItem(m_board);
+    ui->graphicsView->setFixedSize(720, 720);
+
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onPlayButtonClicked()));
     connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(onPauseButtonClicked()));
-    connect(ui->sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(onBoardSizeChanged(int)));
+    connect(ui->sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(setupBoard(int)));
+    connect(ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(setTimeInterval(int)));
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(advanceTime()));
+
+    setupBoard(ui->sizeSlider->value());
 }
 
 MainWindow::~MainWindow()
@@ -72,12 +76,17 @@ void MainWindow::onPauseButtonClicked()
     }
 }
 
-void MainWindow::onBoardSizeChanged(int newSize)
+void MainWindow::setupBoard(int sliderValue)
 {
-    scene->removeItem(m_board);
-    int graphicsViewSize = ui->graphicsView->size().height();
-    int tileSize = graphicsViewSize / newSize;
-    m_board = new Board(newSize, tileSize);
+    if(m_board){
+        scene->removeItem(m_board);
+    }
+    int boardSize = 700;
+    QVector<int> dividers {20, 25, 35, 50, 70, 100};
+    ui->sizeSlider->setMaximum(dividers.size()-1);
+    int tilesNum = dividers[sliderValue];
+    int tileSize = boardSize/tilesNum;
+    m_board = new Board(tilesNum, tileSize);
     scene->addItem(m_board);
     update();
 }
@@ -87,7 +96,8 @@ void MainWindow::advanceTime()
     m_board->advance();
 }
 
-
-
-
-
+void MainWindow::setTimeInterval(int interval)
+{
+    m_timeInterval = interval;
+    m_timer->setInterval(m_timeInterval);
+}

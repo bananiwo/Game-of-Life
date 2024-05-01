@@ -21,7 +21,8 @@ QRectF Tile::boundingRect() const
 
 void Tile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setBrush(m_active ? Qt::darkGray : Qt:: lightGray);
+    painter->setPen(QPen(Qt::lightGray));
+    painter->setBrush(m_active ? Qt::black : Qt:: white);
     painter->drawRect(boundingRect());
 }
 

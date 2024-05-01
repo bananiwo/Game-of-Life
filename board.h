@@ -32,7 +32,7 @@ private:
 
 private:
     QVector<QVector<Tile*>> m_tiles;
-    int m_size;
+    int m_gridNum;
     int m_tileSize;
     State m_state;
 };

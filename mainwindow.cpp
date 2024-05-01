@@ -8,25 +8,29 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setFixedSize(m_windowSize, m_windowSize+60);
-    // center window
-    QPoint centerPoint = QGuiApplication::primaryScreen()->geometry().center();
-    QPoint topleftPoint = centerPoint - this->rect().center();
-    this->move(topleftPoint);
+
+    int screenHeight = QGuiApplication::primaryScreen()->size().height();
+    int windowHeight = (screenHeight > 900 ? 770 : 570);
+    this->setFixedSize(windowHeight, windowHeight);
+    m_graphicsViewSize = windowHeight - 50;
+    // center window to screen
+    int screenCenterX = QGuiApplication::primaryScreen()->geometry().center().x();
+    int offsetX = screenCenterX - this->rect().center().x();
+    this->move(QPoint(offsetX, 0));
+
+    scene = new QGraphicsScene(this);
+    m_timer = new QTimer(this);
 
     ui->pauseButton->setEnabled(false);
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setFixedSize(720, 720);
+    ui->graphicsView->setFixedSize(m_graphicsViewSize, m_graphicsViewSize);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->graphicsView->setFixedSize(720, 720);
 
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onPlayButtonClicked()));
     connect(ui->pauseButton, SIGNAL(clicked()), this, SLOT(onPauseButtonClicked()));
     connect(ui->sizeSlider, SIGNAL(valueChanged(int)), this, SLOT(setupBoard(int)));
     connect(ui->speedSlider, SIGNAL(valueChanged(int)), this, SLOT(setTimeInterval(int)));
-    m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(advanceTime()));
 
     setupBoard(ui->sizeSlider->value());
@@ -81,11 +85,11 @@ void MainWindow::setupBoard(int sliderValue)
     if(m_board){
         scene->removeItem(m_board);
     }
-    int boardSize = 700;
-    QVector<int> dividers {20, 25, 35, 50, 70, 100};
-    ui->sizeSlider->setMaximum(dividers.size()-1);
-    int tilesNum = dividers[sliderValue];
-    int tileSize = boardSize/tilesNum;
+    int gridSize = m_graphicsViewSize - 20;
+    QVector<int> divizors {10, 20, 50, 100};
+    ui->sizeSlider->setMaximum(divizors.size()-1);
+    int tilesNum = divizors[sliderValue];
+    int tileSize = gridSize/tilesNum;
     m_board = new Board(tilesNum, tileSize);
     scene->addItem(m_board);
     update();

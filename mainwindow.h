@@ -35,7 +35,7 @@ private:
     QGraphicsScene *scene;
     Board *m_board = nullptr;
     QTimer *m_timer;
-    int m_windowSize = 750;
+    int m_graphicsViewSize = 500;
     int m_timeInterval = 500;
  };
 #endif // MAINWINDOW_H

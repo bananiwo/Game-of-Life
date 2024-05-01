@@ -54,26 +54,29 @@ void Board::advance()
 {
     if(m_state != State::Play) return;
     // next move logic
-    for (int row=1; row<m_gridNum-1; row++){
-        for (int col=1; col<m_gridNum-1; col++){
+    for (int row=0; row<m_gridNum; row++){
+        for (int col=0; col<m_gridNum; col++){
             Tile* currentTile = m_tiles[row][col];
             int activeNeighbours = 0;
             QVector<Tile*> n = getNeighbours(row, col);
             for (Tile* neighbour : n){
                 if (neighbour->isActive()) activeNeighbours++;
             }
-            if(currentTile->isActive() && activeNeighbours < 2)
+            if(currentTile->isActive())
             {
-                currentTile->activate(false);
+                if((activeNeighbours < 2) || (activeNeighbours > 3))
+                {
+                    currentTile->activate(false);
+                }
             }
-            if(currentTile->isActive() && activeNeighbours > 3)
+            else
             {
-                currentTile->activate(false);
+                if(activeNeighbours == 3)
+                {
+                    currentTile->activate(true);
+                }
             }
-            if(!currentTile->isActive() && activeNeighbours == 3)
-            {
-                currentTile->activate(true);
-            }
+
         }
     }
 
@@ -125,16 +128,20 @@ void Board::allowMousePressEventsForAllTiles(bool allow)
 
 QVector<Tile*> Board::getNeighbours(const int row, const int col) const
 {
-    QVector<Tile*> neighbours;
-    neighbours.resize(8);
-    neighbours[0] = m_tiles[row-1][col-1];
-    neighbours[1] = m_tiles[row-1][col];
-    neighbours[2] = m_tiles[row-1][col+1];
-    neighbours[3] = m_tiles[row][col-1];
-    neighbours[4] = m_tiles[row][col+1];
-    neighbours[5] = m_tiles[row+1][col-1];
-    neighbours[6] = m_tiles[row+1][col];
-    neighbours[7] = m_tiles[row+1][col+1];
+    QVector<Tile*> neighbours{};
+    for (int i=-1; i<=1; i++)
+    {
+        for (int j=-1; j<=1; j++)
+        {
+            if (i==0 && j==0) continue;
+            int newRow = (row+i + m_gridNum) % m_gridNum;
+            int newCol = (col+j + m_gridNum) % m_gridNum;
+            // check if the neighboring cell is within the grid bounds
+            if (newRow >= 0 && newRow < m_gridNum && newCol >= 0 && newCol < m_gridNum){
+                neighbours.append(m_tiles[newRow][newCol]);
+            }
+        }
+    }
     return neighbours;
 }
 
